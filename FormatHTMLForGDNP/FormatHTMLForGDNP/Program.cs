@@ -16,6 +16,8 @@ namespace FormatHTMLForGDNP
             // [!NOTE]
             Regex noteRegex = new Regex("\\[!NOTE\\]");
             string file = File.ReadAllText(args[0]);
+            file = file.Insert(0, @"<xml>" + "\n");
+            file = string.Concat(file, @"</xml>");
             file = noteRegex.Replace(file, @"<strong>Note</strong>");
 
             // Load doc and nodes
@@ -27,10 +29,7 @@ namespace FormatHTMLForGDNP
             }
             catch (Exception)
             {
-                ConsoleColor originalColor = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Error.WriteLine("Failed to open the file. Do you have a single root element?");
-                Console.ForegroundColor = originalColor;
             }
 
             XmlNodeList imgList = doc.GetElementsByTagName("img");

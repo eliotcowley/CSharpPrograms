@@ -74,6 +74,16 @@ namespace FormatHTMLForGDNP
                 }
             }
 
+            // Remove <h1> tag
+            XmlNode xmlTag = doc.FirstChild;
+            XmlNodeList h1List = doc.GetElementsByTagName("h1");
+
+            while (h1List.Count > 0)
+            {
+                XmlNode node = h1List.Item(0);
+                xmlTag.RemoveChild(node);
+            }
+
             // Save to a file so we can read it as a string
             doc.Save("out.html");
             string outFile = File.ReadAllText("out.html");

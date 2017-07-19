@@ -16,6 +16,8 @@ namespace FormatHTMLForGDNP
             // [!NOTE]
             Regex noteRegex = new Regex("\\[!NOTE\\]");
             string file = File.ReadAllText(args[0]);
+
+            // Add root tag
             file = file.Insert(0, @"<xml>" + "\n");
             file = string.Concat(file, @"</xml>");
             file = noteRegex.Replace(file, @"<strong>Note</strong>");
@@ -72,7 +74,17 @@ namespace FormatHTMLForGDNP
                 }
             }
 
+            // Save to a file so we can read it as a string
             doc.Save("out.html");
+            string outFile = File.ReadAllText("out.html");
+            StringBuilder sb = new StringBuilder(outFile);
+
+            // Remove root node and save back to the file
+            sb.Replace(@"<xml>", string.Empty);
+            sb.Replace(@"</xml>", string.Empty);
+            string newFile = sb.ToString();
+            newFile = newFile.Trim();
+            File.WriteAllText("out.html", newFile);
         }
     }
 }
